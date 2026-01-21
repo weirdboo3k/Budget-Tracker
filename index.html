@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Expense Tracker</title>
+  <meta charset="UTF-8" />
+  <title>Personal Budget Tracker</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
-  <h1>Personal Expense Tracker</h1>
-
-  <form>
-    <input type="text" placeholder="Description">
-    <input type="number" placeholder="Amount">
-    <select>
-      <option>Income</option>
-      <option>Expense</option>
-    </select>
-    <button>Add</button>
-  </form>
-
+  <h1>Personal Budget Tracker</h1>
+  <section class="form-section">
+    <h2>Add Income / Expense</h2>
+    <form>
+      <label>
+        Type:
+        <select>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </label>
+      <label>
+        Amount:
+        <input type="number" placeholder="Enter amount" />
+      </label>
+      <label>
+        Category:
+        <input type="text" placeholder="Food, Rent, Salary..." />
+      </label>
+      <label>
+        Note:
+        <input type="text" placeholder="Optional note" />
+      </label>
+      <button type="button">Add</button>
+    </form>
+  </section>
+  <section class="table-section">
+    <h2>History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- dua du lieu vao sau -->
+      </tbody>
+    </table>
+  </section>
 </body>
 </html>
