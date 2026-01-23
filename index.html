@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Personal Budget Tracker</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -39,7 +40,7 @@
     </form>
   </section>
 
-  <!-- bang -->
+  <!-- table -->
   <section class="table-section">
     <h2>History</h2>
     <table>
@@ -64,7 +65,9 @@
   <!-- chart -->
   <section class="chart-section">
     <h2>Income vs Expense</h2>
-    <canvas id="budgetChart"></canvas>
+    <div class="chart-wrapper">
+      <canvas id="budgetChart"></canvas>
+    </div>
   </section>
 
   <!-- script -->
