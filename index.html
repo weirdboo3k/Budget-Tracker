@@ -2,61 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Personal Budget Tracker</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <h1>Personal Budget Tracker</h1>
 
-  <!-- form -->
-  <section class="form-section">
-    <h2>Add Income / Expense</h2>
-    <form id="transaction-form">
-      <label>
-        Type:
-        <select id="type">
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-      </label>
+  <main class="layout">
+    <!-- form -->
+    <section class="form-section card">
+      <div class="section-head">
+        <h2>Add Income / Expense</h2>
+      </div>
 
-      <label>
-        Amount:
-        <input type="number" id="amount" required />
-      </label>
+      <form id="transaction-form" class="form-grid">
+        <label>
+          Type:
+          <select id="type">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </label>
 
-      <label>
-        Category:
-        <input type="text" id="category" required />
-      </label>
+        <label>
+          Amount:
+          <input type="number" id="amount" inputmode="decimal" required />
+        </label>
 
-      <button type="submit">Add</button>
-      <button type="button" id="reset-btn">Reset All</button>
-    </form>
-  </section>
+        <label class="span-2">
+          Category:
+          <input type="text" id="category" required />
+        </label>
 
-  <!-- history -->
-  <section class="table-section">
-    <h2>History</h2>
+        <div class="btn-row span-2">
+          <button type="submit" class="btn-primary">Add</button>
+          <button type="button" id="reset-btn" class="btn-danger">Reset All</button>
+        </div>
+      </form>
+    </section>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Category</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="transaction-list"></tbody>
-    </table>
+    <!-- history -->
+    <section class="table-section card">
+      <div class="section-head section-head--split">
+        <h2>History</h2>
+        <div class="summary summary-inline">
+          <p>Income: <span id="total-income">0</span></p>
+          <p>Expense: <span id="total-expense">0</span></p>
+          <p><span id="balance">Current: 0$</span></p>
+        </div>
+      </div>
 
-    <div class="summary">
-      <p>Total Income: <span id="total-income">0</span></p>
-      <p>Total Expense: <span id="total-expense">0</span></p>
-      <p><span id="balance">Current: 0$</span></p>
-    </div>
-  </section>
+      <div class="table-wrap" aria-label="Transaction history">
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-list"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
   <script src="js/app.js"></script>
 </body>
