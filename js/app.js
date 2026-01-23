@@ -51,3 +51,17 @@ function render() {
   expenseEl.textContent = expense;
   balanceEl.textContent = income - expense;
 }
+
+// chart 
+const ctx = document.getElementById('budgetChart').getContext('2d');
+
+let budgetChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: ['Income', 'Expense'],
+    datasets: [{
+      data: [0, 0],
+      backgroundColor: ['#4caf50', '#f44336']
+    }]
+  }
+});
