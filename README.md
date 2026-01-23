@@ -1,6 +1,5 @@
 # Personal Budget Tracker
 A simple web app to track personal income and expenses.  
-Built as a portfolio project to demonstrate HTML, CSS, and JavaScript skills.
 ## Features (Completed)
 - Add income or expense transactions
 - Categorize transactions (Food, Rent, Salary, etc.)

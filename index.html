@@ -7,36 +7,41 @@
 </head>
 <body>
   <h1>Personal Budget Tracker</h1>
+
+  <!-- form -->
   <section class="form-section">
     <h2>Add Income / Expense</h2>
-    <form>
+    <form id="transaction-form">
       <label>
         Type:
-        <select>
+        <select id="type">
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
       </label>
+
       <label>
         Amount:
-        <input type="number" placeholder="Enter amount" required />
+        <input type="number" id="amount" placeholder="Enter amount" required />
       </label>
+
       <label>
         Category:
-        <input type="text" placeholder="Food, Rent, Salary..." required />
+        <input type="text" id="category" placeholder="Food, Rent, Salary..." required />
       </label>
+
       <label>
         Note:
-        <input type="text" placeholder="Optional note" />
+        <input type="text" id="note" placeholder="Optional note" />
       </label>
+
       <button type="submit">Add</button>
     </form>
   </section>
 
-
+  <!-- bang -->
   <section class="table-section">
     <h2>History</h2>
-
     <table>
       <thead>
         <tr>
@@ -46,12 +51,9 @@
           <th>Note</th>
         </tr>
       </thead>
-      <tbody id="transaction-list">
-        
-      </tbody>
+      <tbody id="transaction-list"></tbody>
     </table>
 
-    
     <div class="summary">
       <p>Total Income: <span id="total-income">0</span></p>
       <p>Total Expense: <span id="total-expense">0</span></p>
@@ -59,6 +61,14 @@
     </div>
   </section>
 
+  <!-- chart -->
+  <section class="chart-section">
+    <h2>Income vs Expense</h2>
+    <canvas id="budgetChart"></canvas>
+  </section>
+
+  <!-- script -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
