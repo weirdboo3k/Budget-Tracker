@@ -9,12 +9,55 @@ h1 {
   text-align: center;
 }
 
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1.35fr;
+  align-items: start;
+}
+
 section {
   background: #fff;
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* tranh viec cards trong grid bi du do su dung margin-bottom */
+.layout section {
+  margin-bottom: 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+form.form-grid label {
+  display: block;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.span-2 {
+  grid-column: span 2;
 }
 
 form label {
@@ -47,6 +90,41 @@ button:hover {
   background-color: #0056b3;
 }
 
+.btn-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 4px;
+}
+
+.btn-row button {
+  margin-top: 0;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #b02a37;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -63,6 +141,28 @@ th {
   background-color: #f0f0f0;
 }
 
+.summary {
+  margin-top: 10px;
+}
+
+.summary p {
+  margin: 0;
+}
+
+.summary-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  justify-content: flex-end;
+  align-items: baseline;
+  font-size: 14px;
+}
+
+.summary-inline p {
+  margin: 0;
+  white-space: nowrap;
+}
+
 .income {
   color: green;
   font-weight: bold;
@@ -77,6 +177,37 @@ th {
 @media (max-width: 600px) {
   body {
     padding: 10px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  section {
+    padding: 12px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .span-2 {
+    grid-column: auto;
+  }
+
+  .btn-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-row button {
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  table {
+    margin-top: 0;
+    min-width: 520px; /* enable horizontal scroll on small screens */
   }
 
   table, th, td {
