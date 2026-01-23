@@ -35,3 +35,12 @@ th, td {
   padding: 8px;
   text-align: center;
 }
+.income {
+  color: green;
+  font-weight: bold;
+}
+
+.expense {
+  color: red;
+  font-weight: bold;
+}

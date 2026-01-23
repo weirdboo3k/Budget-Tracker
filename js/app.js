@@ -1,4 +1,3 @@
-// ===== DOM =====
 const form = document.getElementById("transaction-form");
 const list = document.getElementById("transaction-list");
 const incomeEl = document.getElementById("total-income");
@@ -10,62 +9,23 @@ const amountEl = document.getElementById("amount");
 const categoryEl = document.getElementById("category");
 const noteEl = document.getElementById("note");
 
-// ===== DATA =====
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 
-// ===== CHART =====
-const ctx = document.getElementById("budgetChart").getContext("2d");
-
-let budgetChart = new Chart(ctx, {
-  type: "doughnut",
-  data: {
-    labels: ["Spent", "Remaining"],
-    datasets: [
-      {
-        data: [0, 0],
-        backgroundColor: ["#f44336", "#4caf50"]
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        position: "bottom"
-      }
-    }
-  }
-});
-
-
-// ===== EVENT =====
-form.addEventListener("submit", function (e) {
+form.addEventListener("submit", e => {
   e.preventDefault();
 
-  const amount = Number(amountEl.value);
-
-  // ✅ validate input
-  if (isNaN(amount) || amount <= 0) {
-    alert("Please enter a valid amount");
-    return;
-  }
-
-  const transaction = {
+  transactions.push({
     type: typeEl.value,
-    amount: amount,
-    category: categoryEl.value.trim(),
-    note: noteEl.value.trim()
-  };
+    amount: Number(amountEl.value),
+    category: categoryEl.value,
+    note: noteEl.value
+  });
 
-  transactions.push(transaction);
   localStorage.setItem("transactions", JSON.stringify(transactions));
-
   form.reset();
   render();
 });
 
-// ===== RENDER =====
 function render() {
   list.innerHTML = "";
 
@@ -74,12 +34,17 @@ function render() {
 
   transactions.forEach(t => {
     const tr = document.createElement("tr");
+
+    const sign = t.type === "income" ? "+" : "-";
+    const className = t.type === "income" ? "income" : "expense";
+
     tr.innerHTML = `
       <td>${t.type}</td>
-      <td>${t.amount}</td>
+      <td class="${className}">${sign}${t.amount}</td>
       <td>${t.category}</td>
       <td>${t.note || "-"}</td>
     `;
+
     list.appendChild(tr);
 
     if (t.type === "income") income += t.amount;
@@ -90,17 +55,7 @@ function render() {
   expenseEl.textContent = expense;
   balanceEl.textContent = income - expense;
 
-  updateChart(income, expense);
+  balanceEl.style.color = income - expense >= 0 ? "green" : "red";
 }
 
-// ===== CHART UPDATE =====
-function updateChart(income, expense) {
-  const remaining = Math.max(income - expense, 0);
-
-  budgetChart.data.datasets[0].data = [expense, remaining];
-  budgetChart.update();
-}
-
-
-// ===== INIT =====
 render();
