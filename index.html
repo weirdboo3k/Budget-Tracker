@@ -27,7 +27,7 @@
 
         <label>
           Amount:
-          <input type="number" id="amount" inputmode="decimal" required />
+          <input type="number" id="amount" step="0.01" min="0" inputmode="decimal" required />
         </label>
 
         <label class="span-2">
@@ -51,6 +51,33 @@
           <p>Expense: <span id="total-expense">0</span></p>
           <p><span id="balance">Current: 0$</span></p>
         </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-section">
+        <label>Filter by:</label>
+        <select id="filter-year">
+          <option value="">All Years</option>
+        </select>
+        <select id="filter-month">
+          <option value="">All Months</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select id="filter-day">
+          <option value="">All Days</option>
+        </select>
+        <button type="button" id="clear-filter" class="btn-clear">Clear Filter</button>
       </div>
 
       <div class="table-wrap" aria-label="Transaction history">
