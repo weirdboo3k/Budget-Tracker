@@ -1,4 +1,5 @@
-// DOM elements
+
+// == DOM ELEMENTS ==
 const form = document.getElementById("transaction-form");
 const list = document.getElementById("transaction-list");
 const incomeEl = document.getElementById("total-income");
@@ -8,18 +9,24 @@ const resetBtn = document.getElementById("reset-btn");
 const typeEl = document.getElementById("type");
 const amountEl = document.getElementById("amount");
 const categoryEl = document.getElementById("category");
+const filterYearEl = document.getElementById("filter-year");
+const filterMonthEl = document.getElementById("filter-month");
+const filterDayEl = document.getElementById("filter-day");
+const clearFilterBtn = document.getElementById("clear-filter");
 
-// Data
+// == DATA ==
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 let editIndex = null; // luu index sau khi edit
 
-//  Format số với 2 chữ số
+// == HELPER FUNCTIONS ==
+
+// Format so voi 2 chu so
 const pad = n => String(n).padStart(2, '0');
 
-//  tao date string theo local time
+// Tao date string theo local time (format: YYYY-MM-DDTHH:mm:ss)
 const getDateStr = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 
-// Parse date string va format hien thi
+// Parse date string va format hien thi (dd/mm/yyyy HH:MM)
 const formatDate = (s) => {
   if (!s) s = getDateStr();
   let d;
@@ -33,28 +40,102 @@ const formatDate = (s) => {
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-//  save va render
+// Luu vao localStorage va render lai
 const saveAndRender = () => {
   localStorage.setItem("transactions", JSON.stringify(transactions));
   form.reset();
+  updateFilterOptions();
   render();
 };
 
-// Chan dau + va - trong Amount
+// Lay date object tu date string
+const getDateFromStr = (s) => {
+  if (!s) return null;
+  if (s.includes('T') && !s.includes('Z') && !s.includes('+')) {
+    const [dp, tp] = s.split('T');
+    const [y, m, day] = dp.split('-').map(Number);
+    const [h, min] = tp.split(':').map(Number);
+    return new Date(y, m - 1, day, h, min);
+  }
+  return new Date(s);
+};
+
+// Loc transactions theo nam, thang, ngay
+const filterTransactions = () => {
+  const year = filterYearEl.value;
+  const month = filterMonthEl.value;
+  const day = filterDayEl.value;
+  
+  if (!year && !month && !day) return transactions;
+  
+  return transactions.filter(t => {
+    const d = getDateFromStr(t.date);
+    if (!d) return false;
+    
+    if (year && d.getFullYear() !== Number(year)) return false;
+    if (month && d.getMonth() + 1 !== Number(month)) return false;
+    if (day && d.getDate() !== Number(day)) return false;
+    
+    return true;
+  });
+};
+
+// Cap nhat filter options
+const updateFilterOptions = () => {
+  // Lay tat ca years tu transactions
+  const years = [...new Set(transactions.map(t => {
+    const d = getDateFromStr(t.date);
+    return d ? d.getFullYear() : null;
+  }).filter(y => y !== null))].sort((a, b) => b - a);
+  
+  // Cap nhat year dropdown
+  filterYearEl.innerHTML = '<option value="">All Years</option>';
+  years.forEach(y => {
+    const option = document.createElement('option');
+    option.value = y;
+    option.textContent = y;
+    filterYearEl.appendChild(option);
+  });
+  
+  // Cap nhat day dropdown neu co year va month
+  updateDayOptions();
+};
+
+// Cap nhat day options
+const updateDayOptions = () => {
+  const year = filterYearEl.value;
+  const month = filterMonthEl.value;
+  
+  filterDayEl.innerHTML = '<option value="">All Days</option>';
+  
+  if (year && month) {
+    const daysInMonth = new Date(Number(year), Number(month), 0).getDate();
+    for (let i = 1; i <= daysInMonth; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      filterDayEl.appendChild(option);
+    }
+  }
+};
+
+// == EVENT LISTENERS ==
+
+// Chan dau + va - trong Amount input
 amountEl.addEventListener("keydown", (e) => {
   if (['+', '-'].includes(e.key)) {
     e.preventDefault();
   }
 });
 
-// Form submit
+// Form submit - Add hoac Edit transaction
 form.addEventListener("submit", e => {
   e.preventDefault();
   const tx = { 
     type: typeEl.value, 
     amount: Number(amountEl.value), 
     category: categoryEl.value, 
-    date: editIndex !== null ? transactions[editIndex].date : getDateStr() 
+    date: editIndex !== null ? transactions[editIndex].date : getDateStr() // Giữ date cũ khi edit
   };
   editIndex !== null ? transactions[editIndex] = tx : transactions.push(tx);
   editIndex = null;
@@ -66,16 +147,44 @@ resetBtn.addEventListener("click", () => {
   if (confirm("Are you sure you want to reset all transactions?")) {
     transactions = [];
     localStorage.removeItem("transactions");
+    updateFilterOptions();
     render();
   }
 });
+
+// Filter event listeners
+filterYearEl.addEventListener("change", () => {
+  updateDayOptions();
+  render();
+});
+
+filterMonthEl.addEventListener("change", () => {
+  updateDayOptions();
+  render();
+});
+
+filterDayEl.addEventListener("change", () => {
+  render();
+});
+
+clearFilterBtn.addEventListener("click", () => {
+  filterYearEl.value = "";
+  filterMonthEl.value = "";
+  filterDayEl.value = "";
+  render();
+});
+
+// == RENDER FUNCTION ==
 
 // Render danh sach giao dich
 function render() {
   list.innerHTML = "";
   let income = 0, expense = 0;
   
-  transactions.forEach((t, i) => {
+  const filtered = filterTransactions();
+  
+  filtered.forEach((t) => {
+    const i = transactions.indexOf(t);
     // Tinh tong income va expense
     t.type === "income" ? income += t.amount : expense += t.amount;
     const isInc = t.type === "income";
@@ -122,4 +231,6 @@ function render() {
   balanceEl.style.color = balance >= 0 ? "green" : "red";
 }
 
+// Khoi tao
+updateFilterOptions();
 render();
