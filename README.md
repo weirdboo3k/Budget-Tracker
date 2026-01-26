@@ -1,13 +1,13 @@
 # Personal Budget Tracker
 A simple web app to track personal income and expenses.
 ## Features (Completed)
-- Add income or expense transactions
-- Categorize transactions (Food, Rent, Salary, etc.)
+- Add Income or Expense transactions with Amount and Category
 - View transaction history in a table
 - Calculate total income, total expense, and balance
 - Data persistence using browser `localStorage`
 - Delete individual transactions
 - Edit existing transactions
+- Remove all existing transactions
 ## Features Planned (Next Steps)
 - Filter transactions by category or date
 - Multi-user support (fake login for each user)
