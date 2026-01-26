@@ -40,10 +40,22 @@ const saveAndRender = () => {
   render();
 };
 
+// Chan dau + va - trong Amount
+amountEl.addEventListener("keydown", (e) => {
+  if (['+', '-'].includes(e.key)) {
+    e.preventDefault();
+  }
+});
+
 // Form submit
 form.addEventListener("submit", e => {
   e.preventDefault();
-  const tx = { type: typeEl.value, amount: Number(amountEl.value), category: categoryEl.value, date: editIndex !== null ? transactions[editIndex].date : getDateStr() };
+  const tx = { 
+    type: typeEl.value, 
+    amount: Number(amountEl.value), 
+    category: categoryEl.value, 
+    date: editIndex !== null ? transactions[editIndex].date : getDateStr() 
+  };
   editIndex !== null ? transactions[editIndex] = tx : transactions.push(tx);
   editIndex = null;
   saveAndRender();
@@ -68,12 +80,37 @@ function render() {
     t.type === "income" ? income += t.amount : expense += t.amount;
     const isInc = t.type === "income";
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td><div class="type-cell"><div>${t.type}</div><div class="type-date">${formatDate(t.date)}</div></div></td><td class="${isInc ? "income" : "expense"}">${isInc ? "+" : "-"}${t.amount}$</td><td>${t.category}</td><td><button class="edit-btn">Edit</button><button class="remove-btn">Remove</button></td>`;
+    tr.innerHTML = `
+      <td>
+        <div class="type-cell">
+          <div>${t.type}</div>
+          <div class="type-date">${formatDate(t.date)}</div>
+        </div>
+      </td>
+      <td class="${isInc ? "income" : "expense"}">${isInc ? "+" : "-"}${t.amount}$</td>
+      <td>${t.category}</td>
+      <td>
+        <button class="edit-btn">Edit</button>
+        <button class="remove-btn">Remove</button>
+      </td>
+    `;
     
     // Edit transaction
-    tr.querySelector(".edit-btn").onclick = () => { typeEl.value = t.type; amountEl.value = t.amount; categoryEl.value = t.category; editIndex = i; };
+    tr.querySelector(".edit-btn").onclick = () => { 
+      typeEl.value = t.type; 
+      amountEl.value = t.amount; 
+      categoryEl.value = t.category; 
+      editIndex = i; 
+    };
+    
     // Remove transaction
-    tr.querySelector(".remove-btn").onclick = () => { if (confirm("Remove this transaction?")) { transactions.splice(i, 1); saveAndRender(); } };
+    tr.querySelector(".remove-btn").onclick = () => { 
+      if (confirm("Remove this transaction?")) { 
+        transactions.splice(i, 1); 
+        saveAndRender(); 
+      } 
+    };
+    
     list.appendChild(tr);
   });
   
