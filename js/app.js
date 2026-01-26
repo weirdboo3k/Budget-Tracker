@@ -1,37 +1,52 @@
+// DOM elements
 const form = document.getElementById("transaction-form");
 const list = document.getElementById("transaction-list");
 const incomeEl = document.getElementById("total-income");
 const expenseEl = document.getElementById("total-expense");
 const balanceEl = document.getElementById("balance");
 const resetBtn = document.getElementById("reset-btn");
-
 const typeEl = document.getElementById("type");
 const amountEl = document.getElementById("amount");
 const categoryEl = document.getElementById("category");
 
+// Data
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 let editIndex = null; // luu index sau khi edit
 
-form.addEventListener("submit", e => {
-  e.preventDefault();
+//  Format số với 2 chữ số
+const pad = n => String(n).padStart(2, '0');
 
-  const newTx = {
-    type: typeEl.value,
-    amount: Number(amountEl.value),
-    category: categoryEl.value,
-    date: new Date().toISOString() // Lưu ngày tháng năm
-  };
+//  tao date string theo local time
+const getDateStr = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 
-  if (editIndex !== null) {
-    transactions[editIndex] = newTx;
-    editIndex = null;
-  } else {
-    transactions.push(newTx);
-  }
+// Parse date string va format hien thi
+const formatDate = (s) => {
+  if (!s) s = getDateStr();
+  let d;
+  if (s.includes('T') && !s.includes('Z') && !s.includes('+')) {
+    // Format local: YYYY-MM-DDTHH:mm:ss
+    const [dp, tp] = s.split('T');
+    const [y, m, day] = dp.split('-').map(Number);
+    const [h, min] = tp.split(':').map(Number);
+    d = new Date(y, m - 1, day, h, min);
+  } else d = new Date(s);
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
 
+//  save va render
+const saveAndRender = () => {
   localStorage.setItem("transactions", JSON.stringify(transactions));
   form.reset();
   render();
+};
+
+// Form submit
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const tx = { type: typeEl.value, amount: Number(amountEl.value), category: categoryEl.value, date: editIndex !== null ? transactions[editIndex].date : getDateStr() };
+  editIndex !== null ? transactions[editIndex] = tx : transactions.push(tx);
+  editIndex = null;
+  saveAndRender();
 });
 
 // Reset toan bo giao dich
@@ -43,86 +58,31 @@ resetBtn.addEventListener("click", () => {
   }
 });
 
+// Render danh sach giao dich
 function render() {
   list.innerHTML = "";
-
-  let income = 0;
-  let expense = 0;
-  let currentBalance = 0;
-
-  transactions.forEach((t, index) => {
-    if (t.type === "income") {
-      income += t.amount;
-      currentBalance += t.amount;
-    } else {
-      expense += t.amount;
-      currentBalance -= t.amount;
-    }
-
+  let income = 0, expense = 0;
+  
+  transactions.forEach((t, i) => {
+    // Tinh tong income va expense
+    t.type === "income" ? income += t.amount : expense += t.amount;
+    const isInc = t.type === "income";
     const tr = document.createElement("tr");
-    const sign = t.type === "income" ? "+" : "-";
-    const className = t.type === "income" ? "income" : "expense";
+    tr.innerHTML = `<td><div class="type-cell"><div>${t.type}</div><div class="type-date">${formatDate(t.date)}</div></div></td><td class="${isInc ? "income" : "expense"}">${isInc ? "+" : "-"}${t.amount}$</td><td>${t.category}</td><td><button class="edit-btn">Edit</button><button class="remove-btn">Remove</button></td>`;
     
-    // Format ngay thang nam gio phut
-    let dateStr = "";
-    if (t.date) {
-      const date = new Date(t.date);
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const year = date.getFullYear();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      dateStr = `${day}/${month}/${year} ${hours}:${minutes}`;
-    } else {
-      // Nếu transaction cu khong co date, dung ngay hien tai 
-      const date = new Date();
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const year = date.getFullYear();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      dateStr = `${day}/${month}/${year} ${hours}:${minutes}`;
-    }
-
-    tr.innerHTML = `
-      <td>
-        <div class="type-cell">
-          <div>${t.type}</div>
-          <div class="type-date">${dateStr}</div>
-        </div>
-      </td>
-      <td class="${className}">${sign}${t.amount}$</td>
-      <td>${t.category}</td>
-      <td>
-        <button class="edit-btn">Edit</button>
-        <button class="remove-btn">Remove</button>
-      </td>
-    `;
-
-    //  Edit transaction
-    tr.querySelector(".edit-btn").addEventListener("click", () => {
-      typeEl.value = t.type;
-      amountEl.value = t.amount;
-      categoryEl.value = t.category;
-      editIndex = index;
-    });
-
-    //  Remove transaction
-    tr.querySelector(".remove-btn").addEventListener("click", () => {
-      if (confirm("Remove this transaction?")) {
-        transactions.splice(index, 1);
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-        render();
-      }
-    });
-
+    // Edit transaction
+    tr.querySelector(".edit-btn").onclick = () => { typeEl.value = t.type; amountEl.value = t.amount; categoryEl.value = t.category; editIndex = i; };
+    // Remove transaction
+    tr.querySelector(".remove-btn").onclick = () => { if (confirm("Remove this transaction?")) { transactions.splice(i, 1); saveAndRender(); } };
     list.appendChild(tr);
   });
-
+  
+  // Hien thi tong ket
+  const balance = income - expense;
   incomeEl.textContent = `${income}$`;
   expenseEl.textContent = `${expense}$`;
-  balanceEl.textContent = `Current: ${currentBalance}$`;
-  balanceEl.style.color = currentBalance >= 0 ? "green" : "red";
+  balanceEl.textContent = `Current: ${balance}$`;
+  balanceEl.style.color = balance >= 0 ? "green" : "red";
 }
 
 render();
