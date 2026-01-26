@@ -18,7 +18,8 @@ form.addEventListener("submit", e => {
   const newTx = {
     type: typeEl.value,
     amount: Number(amountEl.value),
-    category: categoryEl.value
+    category: categoryEl.value,
+    date: new Date().toISOString() // Lưu ngày tháng năm
   };
 
   if (editIndex !== null) {
@@ -61,9 +62,35 @@ function render() {
     const tr = document.createElement("tr");
     const sign = t.type === "income" ? "+" : "-";
     const className = t.type === "income" ? "income" : "expense";
+    
+    // Format ngay thang nam gio phut
+    let dateStr = "";
+    if (t.date) {
+      const date = new Date(t.date);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      dateStr = `${day}/${month}/${year} ${hours}:${minutes}`;
+    } else {
+      // Nếu transaction cu khong co date, dung ngay hien tai 
+      const date = new Date();
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      dateStr = `${day}/${month}/${year} ${hours}:${minutes}`;
+    }
 
     tr.innerHTML = `
-      <td>${t.type}</td>
+      <td>
+        <div class="type-cell">
+          <div>${t.type}</div>
+          <div class="type-date">${dateStr}</div>
+        </div>
+      </td>
       <td class="${className}">${sign}${t.amount}$</td>
       <td>${t.category}</td>
       <td>
@@ -72,7 +99,7 @@ function render() {
       </td>
     `;
 
-    //  Edit
+    //  Edit transaction
     tr.querySelector(".edit-btn").addEventListener("click", () => {
       typeEl.value = t.type;
       amountEl.value = t.amount;
@@ -80,7 +107,7 @@ function render() {
       editIndex = index;
     });
 
-    //  Remove
+    //  Remove transaction
     tr.querySelector(".remove-btn").addEventListener("click", () => {
       if (confirm("Remove this transaction?")) {
         transactions.splice(index, 1);
