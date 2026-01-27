@@ -19,5 +19,4 @@ A simple web application to track income and expenses.
 
 ## Tech Stack
 - Frontend: HTML5, CSS3, JavaScript (ES6)
-- Backend: Node.js, Express.js
-- Storage: localStorage + API
+- Storage: localStorage 
