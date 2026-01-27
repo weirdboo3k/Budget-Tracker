@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Lưu transactions trong bộ nhớ
 let transactions = [];
@@ -26,6 +28,17 @@ app.post("/transactions", (req, res) => {
   res.json(tx);
 });
 
+// PUT update
+app.put("/transactions/:id", (req, res) => {
+  const index = transactions.findIndex(t => t.id == req.params.id);
+  if (index !== -1) {
+    transactions[index] = { ...transactions[index], ...req.body };
+    res.json(transactions[index]);
+  } else {
+    res.status(404).json({ error: "Transaction not found" });
+  }
+});
+
 // DELETE by id
 app.delete("/transactions/:id", (req, res) => {
   transactions = transactions.filter(t => t.id != req.params.id);
@@ -35,14 +48,14 @@ app.delete("/transactions/:id", (req, res) => {
 // --------------------------
 // Serve frontend
 // --------------------------
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(__dirname, "../index.html"));
 });
 
 // --------------------------
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });

@@ -29,12 +29,12 @@
 
         <label>
           Amount:
-          <input type="number" id="amount" step="0.01" min="0" inputmode="decimal" required />
+          <input type="number" id="amount" step="0.01" min="0" max="999999999" pattern="[0-9.]*" inputmode="decimal" placeholder="0" required />
         </label>
 
         <label class="span-2">
           Category:
-          <input type="text" id="category" required />
+          <input type="text" id="category" placeholder="Cafe,Salary,Food,..." required />
         </label>
 
         <div class="btn-row span-2">

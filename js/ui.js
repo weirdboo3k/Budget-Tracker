@@ -14,9 +14,10 @@ const renderTransactions = (transactions) => {
 
   transactions.forEach((t, i) => {
     const tr = document.createElement("tr");
+    const amountClass = t.type === "income" ? "income" : "expense";
     tr.innerHTML = `
       <td>${t.type}<br><small>${formatDate(t.date)}</small></td>
-      <td>${t.type==="income"? "+" : "-"}${t.amount}$</td>
+      <td class="${amountClass}">${t.type==="income"? "+" : "-"}${t.amount}$</td>
       <td>${t.category}</td>
       <td>
         <button class="edit-btn">Edit</button>
@@ -41,6 +42,13 @@ const renderTransactions = (transactions) => {
   });
 
   balanceEl.textContent = `Current: ${income - expense}$`;
+  const balance = income - expense;
+  balanceEl.className = balance >= 0 ? "income" : "expense";
   incomeEl.textContent = `${income}$`;
   expenseEl.textContent = `${expense}$`;
+
+  // Update filter options
+  if (typeof updateFilterOptions === 'function') {
+    updateFilterOptions();
+  }
 };
