@@ -1,4 +1,4 @@
-/* components.css - table, summary, filter section */
+/* tables, summary, filter section */
 .table-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -18,10 +18,7 @@ th, td {
   text-align: center;
 }
 
-th {
-  background-color: #f0f0f0;
-  font-weight: bold;
-}
+th { background-color: #f0f0f0; }
 
 .summary {
   margin-top: 10px;

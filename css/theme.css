@@ -1,4 +1,4 @@
-/* theme.css - buttons, type-cell, income/expense colors */
+/* colors, buttons, type-cell */
 button {
   margin-top: 10px;
   padding: 8px 12px;
@@ -10,9 +10,7 @@ button {
   color: #fff;
 }
 
-button:hover {
-  background-color: #0056b3;
-}
+button:hover { background-color: #0056b3; }
 
 .btn-row {
   display: flex;
@@ -22,13 +20,9 @@ button:hover {
   margin-top: 4px;
 }
 
-.btn-row button {
-  margin-top: 0;
-}
+.btn-row button { margin-top: 0; }
 
-.btn-primary {
-  background-color: #007bff;
-}
+.btn-primary { background-color: #007bff; }
 .btn-primary:hover { background-color: #0056b3; }
 
 .btn-danger { background-color: #dc3545; }

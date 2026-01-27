@@ -1,24 +1,53 @@
-let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-let editIndex = null; // lưu index khi edit
+let transactions = [];
+let editIndex = null;
 
-// Lưu vào localStorage
 const saveTransactions = () => {
   localStorage.setItem("transactions", JSON.stringify(transactions));
 };
 
-// Thêm hoặc chỉnh sửa transaction
+const loadTransactions = () => {
+  fetch("/transactions")
+    .then(res => res.json())
+    .then(data => {
+      transactions = data;
+      saveTransactions();
+      renderTransactions(transactions);
+    });
+};
+
 const addOrEditTransaction = (tx) => {
   if (editIndex !== null) {
     transactions[editIndex] = tx;
     editIndex = null;
-  } else {
-    transactions.push(tx);
+    saveTransactions();
+    renderTransactions(transactions);
+    return;
   }
-  saveTransactions();
+
+  fetch("/transactions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(tx),
+  })
+    .then(res => res.json())
+    .then(savedTx => {
+      transactions.push(savedTx);
+      saveTransactions();
+      renderTransactions(transactions);
+    });
 };
 
-// Xóa tất cả transaction
+const removeTransaction = (id) => {
+  fetch(`/transactions/${id}`, { method: "DELETE" })
+    .then(() => {
+      transactions = transactions.filter(t => t.id != id);
+      saveTransactions();
+      renderTransactions(transactions);
+    });
+};
+
 const resetTransactions = () => {
   transactions = [];
   localStorage.removeItem("transactions");
+  renderTransactions(transactions);
 };
