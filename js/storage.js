@@ -1,38 +1,36 @@
+// =======================
+// STORAGE & API
+// =======================
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-let editIndex = null; // lưu index khi edit
+window.editIndex = null; // global
 
-// Lưu vào localStorage
 const saveTransactions = () => {
   localStorage.setItem("transactions", JSON.stringify(transactions));
 };
 
-// Hàm render transactions
-const renderTransactions = () => {
-  // TODO: viết render theo table hoặc list
+// Load từ backend
+const loadTransactions = () => {
+  fetch("http://localhost:3001/transactions")
+    .then(res => res.json())
+    .then(data => {
+      transactions = data;
+      saveTransactions();
+      saveAndRender();
+    })
+    .catch(err => console.log("Backend not reachable, using LocalStorage", err));
 };
 
-// Load transactions từ backend khi mở trang
-fetch("http://localhost:3001/transactions")
-  .then(res => res.json())
-  .then(data => {
-    transactions = data;
-    saveTransactions();
-    renderTransactions();
-  })
-  .catch(err => console.log("Error loading transactions from API", err));
-
-// Thêm hoặc chỉnh sửa transaction
+// Add / Edit transaction
 const addOrEditTransaction = (tx) => {
-  // EDIT
-  if (editIndex !== null) {
-    transactions[editIndex] = tx;
-    editIndex = null;
+  if (window.editIndex !== null) {
+    transactions[window.editIndex] = tx;
+    window.editIndex = null;
     saveTransactions();
-    renderTransactions();
+    saveAndRender();
     return;
   }
 
-  // ADD: gọi API
+  // Add via backend
   fetch("http://localhost:3001/transactions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -42,26 +40,38 @@ const addOrEditTransaction = (tx) => {
     .then(savedTx => {
       transactions.push(savedTx);
       saveTransactions();
-      renderTransactions();
+      saveAndRender();
     })
-    .catch(err => console.log("Error adding transaction", err));
+    .catch(err => {
+      console.log("Backend error, saving to LocalStorage only", err);
+      tx.id = Date.now();
+      transactions.push(tx);
+      saveTransactions();
+      saveAndRender();
+    });
 };
 
-// Remove transaction qua API
-const removeTransaction = (id) => {
+// Remove transaction
+const removeTransactionById = (id) => {
   fetch(`http://localhost:3001/transactions/${id}`, { method: "DELETE" })
     .then(() => {
       transactions = transactions.filter(t => t.id !== id);
       saveTransactions();
-      renderTransactions();
+      saveAndRender();
     })
-    .catch(err => console.log("Error removing transaction", err));
+    .catch(err => {
+      console.log("Backend remove failed, removing locally", err);
+      transactions = transactions.filter(t => t.id !== id);
+      saveTransactions();
+      saveAndRender();
+    });
 };
 
-// Reset tất cả transactions
+// Reset all
 const resetTransactions = () => {
-  // nếu muốn xoá tất cả backend, backend cần hỗ trợ DELETE all
-  transactions = [];
-  localStorage.removeItem("transactions");
-  renderTransactions();
+  if(confirm("Are you sure you want to reset all transactions?")) {
+    transactions = [];
+    localStorage.removeItem("transactions");
+    saveAndRender();
+  }
 };

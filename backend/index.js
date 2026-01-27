@@ -7,7 +7,10 @@ app.use(express.json());
 
 let transactions = [];
 
-// ADD: them giao dich
+app.get("/transactions", (req, res) => {
+  res.json(transactions);
+});
+
 app.post("/transactions", (req, res) => {
   const tx = {
     id: Date.now(),
@@ -17,7 +20,10 @@ app.post("/transactions", (req, res) => {
   res.json(tx);
 });
 
-
+app.delete("/transactions/:id", (req, res) => {
+  transactions = transactions.filter(t => t.id != req.params.id);
+  res.json({ success: true });
+});
 
 app.listen(3001, () => {
   console.log("API running at http://localhost:3001");
