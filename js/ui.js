@@ -32,6 +32,11 @@ const renderTransactions = (transactions) => {
       document.getElementById("amount").value = t.amount;
       document.getElementById("category").value = t.category;
       editIndex = i;
+      document.getElementById("type").focus();
+      // Visual feedback
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.textContent = "Update";
+      submitBtn.style.background = "#667eea";
     };
     // Remove
     tr.querySelector(".remove-btn").onclick = () => {

@@ -41,10 +41,13 @@ form.addEventListener("submit", e => {
   };
   addOrEditTransaction(tx);
   form.reset();
+  const submitBtn = document.querySelector('button[type="submit"]');
+  if (submitBtn) submitBtn.textContent = "Add";
+  editIndex = null;
 });
 
 document.getElementById("reset-btn").addEventListener("click", () => {
-  if(confirm("Reset all transactions?")) resetTransactions();
+  resetTransactions();
 });
 
 // Load dữ liệu lần đầu
