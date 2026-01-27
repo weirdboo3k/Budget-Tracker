@@ -1,0 +1,70 @@
+/* components.css - table, summary, filter section */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.summary {
+  margin-top: 10px;
+}
+
+.summary p {
+  margin: 0;
+}
+
+.summary-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  justify-content: flex-end;
+  align-items: baseline;
+  font-size: 14px;
+}
+
+.summary-inline p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.filter-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-section label {
+  font-weight: bold;
+  margin: 0;
+  margin-right: 5px;
+}
+
+.filter-section select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
