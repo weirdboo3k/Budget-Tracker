@@ -2,12 +2,22 @@ let transactions = [];
 let editIndex = null;
 
 const saveTransactions = () => {
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+  try {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  } catch (e) {
+    console.error("Error saving transactions:", e);
+    alert("Error saving data. Your storage might be full.");
+  }
 };
 
 const loadTransactions = () => {
-  const saved = localStorage.getItem("transactions");
-  transactions = saved ? JSON.parse(saved) : [];
+  try {
+    const saved = localStorage.getItem("transactions");
+    transactions = saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    console.error("Error loading transactions:", e);
+    transactions = [];
+  }
   renderTransactions(transactions);
 };
 
@@ -16,8 +26,10 @@ const addOrEditTransaction = (tx) => {
     const txToUpdate = transactions[editIndex];
     if (txToUpdate) {
       transactions[editIndex] = {
-        ...txToUpdate,
-        ...tx,
+        id: txToUpdate.id,
+        type: tx.type,
+        amount: tx.amount,
+        category: tx.category,
         date: txToUpdate.date
       };
       editIndex = null;
@@ -35,7 +47,7 @@ const addOrEditTransaction = (tx) => {
 };
 
 const removeTransaction = (id) => {
-  transactions = transactions.filter(t => t.id != id);
+  transactions = transactions.filter(t => t.id !== id);
   saveTransactions();
   renderTransactions(transactions);
 };

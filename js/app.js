@@ -21,13 +21,22 @@ form.addEventListener("submit", e => {
   // Kiểm tra Amount hợp lệ
   if (!amountValue || amountValue <= 0) {
     alert("Amount phải lớn hơn 0!");
+    amountInput.focus();
+    return;
+  }
+
+  // Validate category
+  const category = document.getElementById("category").value.trim();
+  if (!category) {
+    alert("Category không được để trống!");
+    document.getElementById("category").focus();
     return;
   }
   
   const tx = {
     type: document.getElementById("type").value,
     amount: amountValue,
-    category: document.getElementById("category").value,
+    category: category,
     date: new Date().toISOString()
   };
   addOrEditTransaction(tx);

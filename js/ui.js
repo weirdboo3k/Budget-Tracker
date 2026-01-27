@@ -1,6 +1,8 @@
 const formatDate = (s) => {
   const d = new Date(s);
-  return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} ${hours}:${minutes}`;
 };
 
 const renderTransactions = (transactions) => {

@@ -53,9 +53,9 @@ const filterTransactions = () => {
 
   let filtered = transactions.filter(t => {
     const d = new Date(t.date);
-    if(year && d.getFullYear()!=year) return false;
-    if(month && (d.getMonth()+1)!=month) return false;
-    if(day && d.getDate()!=day) return false;
+    if (year && d.getFullYear() != year) return false;
+    if (month && (d.getMonth() + 1) != month) return false;
+    if (day && d.getDate() != day) return false;
     return true;
   });
 
