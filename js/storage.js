@@ -63,3 +63,18 @@ const resetTransactions = () => {
 const fetchTransactions = () => {
   return Promise.resolve(transactions);
 };
+
+const exportToCSV = () => {
+  const csvContent = "data:text/csv;charset=utf-8,"
+    + "Type,Amount,Category,Date\n"
+    + transactions.map(t => `${t.type},${t.amount},${t.category},${formatDate(t.date)}`).join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "transactions.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+document.getElementById("export-btn").addEventListener("click", exportToCSV);

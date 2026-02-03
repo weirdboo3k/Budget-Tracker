@@ -11,11 +11,11 @@ h1 {
 }
 
 .layout {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   display: grid;
   gap: 16px;
-  grid-template-columns: 1fr 1.35fr;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: start;
 }
 
@@ -77,7 +77,7 @@ input, select {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   body { padding: 10px; }
   .layout { grid-template-columns: 1fr; }
   section { padding: 12px; }

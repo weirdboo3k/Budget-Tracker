@@ -26,7 +26,7 @@ const renderTransactions = (transactions) => {
         <button class="remove-btn">Remove</button>
       </td>
     `;
-    // Edit
+    // Edit button
     tr.querySelector(".edit-btn").onclick = () => {
       document.getElementById("type").value = t.type;
       document.getElementById("amount").value = t.amount;
@@ -38,7 +38,7 @@ const renderTransactions = (transactions) => {
       if (submitBtn) submitBtn.textContent = "Update";
       submitBtn.style.background = "#667eea";
     };
-    // Remove
+    // Remove button
     tr.querySelector(".remove-btn").onclick = () => {
       if(confirm("Remove this transaction?")) removeTransaction(t.id);
     };
@@ -58,4 +58,36 @@ const renderTransactions = (transactions) => {
   if (typeof updateFilterOptions === 'function') {
     updateFilterOptions();
   }
+
+  // Update chart
+  updateChart();
+};
+
+let chart;
+
+const updateChart = () => {
+  const ctx = document.getElementById('summary-chart').getContext('2d');
+  const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+  const expense = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Income', 'Expense'],
+      datasets: [{
+        data: [income, expense],
+        backgroundColor: ['#28a745', '#dc3545'],
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+        }
+      }
+    }
+  });
 };
