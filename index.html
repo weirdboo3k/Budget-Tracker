@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Budget Tracker</title>
+  <title>個人予算トラッカー</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/theme.css" />
 </head>
 <body>
-  <h1>Personal Budget Tracker</h1>
-  <button id="theme-toggle" class="btn-clear" style="position: absolute; top: 20px; right: 20px;">🌙 Dark Mode</button>
+  <h1>個人予算トラッカー</h1>
+  <button id="theme-toggle" class="btn-clear" style="position: absolute; top: 20px; right: 20px;">🌙 ダークモード</button>
 
   <main class="layout">
     <!-- chart -->
     <section class="chart-section card">
       <div class="section-head">
-        <h2>Summary Chart</h2>
+        <h2>要約チャート</h2>
       </div>
       <canvas id="summary-chart"></canvas>
     </section>
@@ -24,40 +24,40 @@
     <!-- form -->
     <section class="form-section card">
       <div class="section-head">
-        <h2>Add Income / Expense</h2>
+        <h2>収入/支出を追加</h2>
       </div>
 
       <form id="transaction-form" class="form-grid">
         <label>
-          Type:
+          タイプ:
           <select id="type">
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="income">収入</option>
+            <option value="expense">支出</option>
           </select>
         </label>
 
         <label>
-          Amount:
+          金額:
           <input type="number" id="amount" step="0.01" min="0" max="999999999" pattern="[0-9.]*" inputmode="decimal" placeholder="0" required />
         </label>
 
         <label class="span-2">
-          Category:
+          カテゴリ:
           <select id="category" required>
-            <option value="">Select Category</option>
-            <option value="Salary">Salary</option>
-            <option value="Freelance">Freelance</option>
-            <option value="Food">Food</option>
-            <option value="Transport">Transport</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Utilities">Utilities</option>
-            <option value="Other">Other</option>
+            <option value="">カテゴリを選択</option>
+            <option value="Salary">給与</option>
+            <option value="Freelance">フリーランス</option>
+            <option value="Food">食品</option>
+            <option value="Transport">交通</option>
+            <option value="Entertainment">エンターテイメント</option>
+            <option value="Utilities">公共料金</option>
+            <option value="Other">その他</option>
           </select>
         </label>
 
         <div class="btn-row span-2">
-          <button type="submit" class="btn-primary">Add</button>
-          <button type="button" id="reset-btn" class="btn-danger">Reset All</button>
+          <button type="submit" class="btn-primary">追加</button>
+          <button type="button" id="reset-btn" class="btn-danger">すべてリセット</button>
         </div>
       </form>
     </section>
@@ -65,53 +65,53 @@
     <!-- history -->
     <section class="table-section card">
       <div class="section-head section-head--split">
-        <h2>History</h2>
-        <button id="export-btn" class="btn-primary">Export CSV</button>
+        <h2>履歴</h2>
+        <button id="export-btn" class="btn-primary">CSVエクスポート</button>
       </div>
         <div class="summary summary-inline">
-          <p>Income: <span id="total-income">0</span></p>
-          <p>Expense: <span id="total-expense">0</span></p>
-          <p><span id="balance">Current: 0$</span></p>
+          <p>収入: <span id="total-income">0</span></p>
+          <p>支出: <span id="total-expense">0</span></p>
+          <p><span id="balance">現在: 0$</span></p>
         </div>
       </div>
 
       <!-- Filter -->
       <div class="filter-section">
-        <label>Search:</label>
-        <input type="text" id="search-input" placeholder="Search by category..." />
-        <label>Filter by:</label>
+        <label>検索:</label>
+        <input type="text" id="search-input" placeholder="カテゴリで検索..." />
+        <label>フィルタ:</label>
         <select id="filter-year">
-          <option value="">All Years</option>
+          <option value="">全年</option>
         </select>
         <select id="filter-month">
-          <option value="">All Months</option>
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
+          <option value="">全月</option>
+          <option value="1">1月</option>
+          <option value="2">2月</option>
+          <option value="3">3月</option>
+          <option value="4">4月</option>
+          <option value="5">5月</option>
+          <option value="6">6月</option>
+          <option value="7">7月</option>
+          <option value="8">8月</option>
+          <option value="9">9月</option>
+          <option value="10">10月</option>
+          <option value="11">11月</option>
+          <option value="12">12月</option>
         </select>
         <select id="filter-day">
-          <option value="">All Days</option>
+          <option value="">全日</option>
         </select>
-        <button type="button" id="clear-filter" class="btn-clear">Clear Filter</button>
+        <button type="button" id="clear-filter" class="btn-clear">フィルタクリア</button>
       </div>
 
-      <div class="table-wrap" aria-label="Transaction history">
+      <div class="table-wrap" aria-label="取引履歴">
         <table>
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>Category</th>
-              <th>Actions</th>
+              <th>タイプ</th>
+              <th>金額</th>
+              <th>カテゴリ</th>
+              <th>アクション</th>
             </tr>
           </thead>
           <tbody id="transaction-list"></tbody>

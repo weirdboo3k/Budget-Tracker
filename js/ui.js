@@ -22,8 +22,8 @@ const renderTransactions = (transactions) => {
       <td class="${amountClass}">${t.type==="income"? "+" : "-"}${t.amount}$</td>
       <td>${t.category}</td>
       <td>
-        <button class="edit-btn">Edit</button>
-        <button class="remove-btn">Remove</button>
+        <button class="edit-btn">編集</button>
+        <button class="remove-btn">削除</button>
       </td>
     `;
     // Edit button
@@ -35,12 +35,12 @@ const renderTransactions = (transactions) => {
       document.getElementById("type").focus();
       // Visual feedback
       const submitBtn = document.querySelector('button[type="submit"]');
-      if (submitBtn) submitBtn.textContent = "Update";
+      if (submitBtn) submitBtn.textContent = "更新";
       submitBtn.style.background = "#667eea";
     };
     // Remove button
     tr.querySelector(".remove-btn").onclick = () => {
-      if(confirm("Remove this transaction?")) removeTransaction(t.id);
+      if(confirm("この取引を削除しますか？")) removeTransaction(t.id);
     };
 
     listEl.appendChild(tr);
@@ -48,7 +48,7 @@ const renderTransactions = (transactions) => {
     t.type === "income" ? income += t.amount : expense += t.amount;
   });
 
-  balanceEl.textContent = `Current: ${income - expense}$`;
+  balanceEl.textContent = `現在: ${income - expense}$`;
   const balance = income - expense;
   balanceEl.className = balance >= 0 ? "income" : "expense";
   incomeEl.textContent = `${income}$`;
@@ -75,7 +75,7 @@ const updateChart = () => {
   chart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Income', 'Expense'],
+      labels: ['収入', '支出'],
       datasets: [{
         data: [income, expense],
         backgroundColor: ['#28a745', '#dc3545'],

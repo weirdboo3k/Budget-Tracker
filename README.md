@@ -1,31 +1,31 @@
-# Personal Budget Tracker
-A modern web application to track income and expenses with enhanced features.
+# 個人予算トラッカー
+収入と支出を追跡するためのモダンなウェブアプリケーションで、強化された機能を備えています。
 
-## Features
+## 機能
 
-- Add income/expense transactions with predefined categories
-- View transaction history in a responsive table
-- Calculate total income, expense, and balance
-- Edit and delete transactions
-- Filter transactions by date (year, month, day)
-- Search transactions by category
-- Export transaction data to CSV
-- Visual summary chart (doughnut chart for income vs expense)
-- Dark mode toggle
-- Data persistence with localStorage
-- Responsive design for mobile and desktop
+- 事前定義されたカテゴリで収入/支出取引を追加
+- レスポンシブなテーブルで取引履歴を表示
+- 総収入、支出、残高を計算
+- 取引の編集と削除
+- 日付で取引をフィルタリング（年、月、日）
+- カテゴリで取引を検索
+- 取引データをCSVにエクスポート
+- 視覚的な要約チャート（収入対支出のドーナツチャート）
+- ダークモード切り替え
+- localStorageによるデータ永続化
+- モバイルとデスクトップ向けのレスポンシブデザイン
 
-## Usage
-- **Add Transaction**: Select type, enter amount, choose category, and click "Add"
-- **Edit**: Click "Edit" button to modify a transaction
-- **Delete**: Click "Remove" button to delete a transaction
-- **Filter**: Use the dropdown menus to filter by year, month, or day
-- **Search**: Type in the search box to filter by category
-- **Export**: Click "Export CSV" to download transaction data
-- **Dark Mode**: Toggle between light and dark themes
-- **Reset All**: Click "Reset All" to delete all transactions
+## 使用方法
+- **取引の追加**: タイプを選択し、金額を入力し、カテゴリを選択して「追加」をクリック
+- **編集**: 「編集」ボタンをクリックして取引を変更
+- **削除**: 「削除」ボタンをクリックして取引を削除
+- **フィルタ**: ドロップダウンメニューを使用して年、月、日でフィルタ
+- **検索**: 検索ボックスにタイプしてカテゴリでフィルタ
+- **エクスポート**: 「CSVエクスポート」をクリックして取引データをダウンロード
+- **ダークモード**: ライトとダークテーマを切り替え
+- **すべてリセット**: 「すべてリセット」をクリックしてすべての取引を削除
 
-## Tech Stack
-- Frontend: HTML5, CSS3, JavaScript (ES6)
-- Chart Library: Chart.js
-- Storage: localStorage 
+## 技術スタック
+- フロントエンド: HTML5, CSS3, JavaScript (ES6)
+- チャートライブラリ: Chart.js
+- ストレージ: localStorage 

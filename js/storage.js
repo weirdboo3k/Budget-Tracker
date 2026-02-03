@@ -6,7 +6,7 @@ const saveTransactions = () => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   } catch (e) {
     console.error("Error saving transactions:", e);
-    alert("Error saving data. Your storage might be full.");
+    alert("データの保存エラー。ストレージが満杯かもしれません。");
   }
 };
 
@@ -53,7 +53,7 @@ const removeTransaction = (id) => {
 };
 
 const resetTransactions = () => {
-  if (confirm("Reset all transactions?")) {
+  if (confirm("すべての取引をリセットしますか？")) {
     transactions = [];
     localStorage.removeItem("transactions");
     renderTransactions(transactions);
@@ -66,7 +66,7 @@ const fetchTransactions = () => {
 
 const exportToCSV = () => {
   const csvContent = "data:text/csv;charset=utf-8,"
-    + "Type,Amount,Category,Date\n"
+    + "タイプ,金額,カテゴリ,日付\n"
     + transactions.map(t => `${t.type},${t.amount},${t.category},${formatDate(t.date)}`).join("\n");
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");

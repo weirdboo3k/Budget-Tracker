@@ -20,7 +20,7 @@ form.addEventListener("submit", e => {
 
   // Validate Amount
   if (!amountValue || amountValue <= 0) {
-    alert("Amount must be greater than 0!");
+    alert("金額は0より大きくなければなりません！");
     amountInput.focus();
     return;
   }
@@ -28,7 +28,7 @@ form.addEventListener("submit", e => {
   // Validate category
   const category = document.getElementById("category").value;
   if (!category) {
-    alert("Please select a category!");
+    alert("カテゴリを選択してください！");
     document.getElementById("category").focus();
     return;
   }
@@ -42,7 +42,7 @@ form.addEventListener("submit", e => {
   addOrEditTransaction(tx);
   form.reset();
   const submitBtn = document.querySelector('button[type="submit"]');
-  if (submitBtn) submitBtn.textContent = "Add";
+  if (submitBtn) submitBtn.textContent = "追加";
   editIndex = null;
 });
 
@@ -57,6 +57,6 @@ loadTransactions();
 document.getElementById("theme-toggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const btn = document.getElementById("theme-toggle");
-  btn.textContent = document.body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
+  btn.textContent = document.body.classList.contains("dark") ? "☀️ ライトモード" : "🌙 ダークモード";
 });
 
