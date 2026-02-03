@@ -9,6 +9,19 @@ const translateType = (type) => {
   return type === "income" ? "収入" : "支出";
 };
 
+const translateCategory = (category) => {
+  const translations = {
+    "Salary": "給与",
+    "Freelance": "フリーランス",
+    "Food": "食品",
+    "Transport": "交通",
+    "Entertainment": "エンターテイメント",
+    "Utilities": "公共料金",
+    "Other": "その他"
+  };
+  return translations[category] || category;
+};
+
 const renderTransactions = (transactions) => {
   const listEl = document.getElementById("transaction-list");
   const incomeEl = document.getElementById("total-income");
@@ -24,7 +37,7 @@ const renderTransactions = (transactions) => {
     tr.innerHTML = `
       <td>${translateType(t.type)}<br><small>${formatDate(t.date)}</small></td>
       <td class="${amountClass}">${t.type==="income"? "+" : "-"}${t.amount}$</td>
-      <td>${t.category}</td>
+      <td>${translateCategory(t.category)}</td>
       <td>
         <button class="edit-btn">編集</button>
         <button class="remove-btn">削除</button>
