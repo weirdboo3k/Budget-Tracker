@@ -17,14 +17,14 @@ const updateFilterOptions = () => {
   // Update year options
   const currentYear = filterYearEl.value;
   const yearOptions = Array.from(years).sort((a, b) => b - a);
-  const yearHTML = '<option value="">All Years</option>' + 
+  const yearHTML = '<option value="">全年</option>' + 
     yearOptions.map(y => `<option value="${y}">${y}</option>`).join('');
   filterYearEl.innerHTML = yearHTML;
   if (currentYear) filterYearEl.value = currentYear;
 
   // Update day options based on selected month and year
   const currentDay = filterDayEl.value;
-  let dayHTML = '<option value="">All Days</option>';
+  let dayHTML = '<option value="">全日</option>';
   
   const selectedMonth = parseInt(filterMonthEl.value);
   const selectedYear = parseInt(filterYearEl.value);

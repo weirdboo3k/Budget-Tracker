@@ -5,6 +5,10 @@ const formatDate = (s) => {
   return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} ${hours}:${minutes}`;
 };
 
+const translateType = (type) => {
+  return type === "income" ? "収入" : "支出";
+};
+
 const renderTransactions = (transactions) => {
   const listEl = document.getElementById("transaction-list");
   const incomeEl = document.getElementById("total-income");
@@ -18,7 +22,7 @@ const renderTransactions = (transactions) => {
     const tr = document.createElement("tr");
     const amountClass = t.type === "income" ? "income" : "expense";
     tr.innerHTML = `
-      <td>${t.type}<br><small>${formatDate(t.date)}</small></td>
+      <td>${translateType(t.type)}<br><small>${formatDate(t.date)}</small></td>
       <td class="${amountClass}">${t.type==="income"? "+" : "-"}${t.amount}$</td>
       <td>${t.category}</td>
       <td>
