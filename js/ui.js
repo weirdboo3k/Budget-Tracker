@@ -2,11 +2,7 @@
  * UI rendering and interaction functions for the Budget Tracker
  */
 
-/**
- * Formats a date string to DD/MM/YYYY HH:MM format
- * @param {string} dateString - ISO date string
- * @returns {string} Formatted date
- */
+// 日付を見やすい形式に変換する (日/月/年 時:分)
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const hours = String(date.getHours()).padStart(2, '0');
@@ -14,20 +10,12 @@ const formatDate = (dateString) => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${hours}:${minutes}`;
 };
 
-/**
- * Translates transaction type to Japanese
- * @param {string} type - 'income' or 'expense'
- * @returns {string} Japanese translation
- */
+// 種類を日本語に翻訳 (income → 収入, expense → 支出)
 const translateType = (type) => {
   return type === "income" ? "収入" : "支出";
 };
 
-/**
- * Translates category to Japanese
- * @param {string} category - English category name
- * @returns {string} Japanese translation
- */
+// カテゴリを日本語に翻訳
 const translateCategory = (category) => {
   const translations = {
     "Salary": "給与",
@@ -41,10 +29,7 @@ const translateCategory = (category) => {
   return translations[category] || category;
 };
 
-/**
- * Renders the transaction list and summary
- * @param {Array} transactions - Array of transaction objects
- */
+// 取引一覧と合計を画面に表示
 const renderTransactions = (transactions) => {
   const listEl = document.getElementById("transaction-list");
   const incomeEl = document.getElementById("total-income");
@@ -52,9 +37,10 @@ const renderTransactions = (transactions) => {
   const balanceEl = document.getElementById("balance");
 
   listEl.innerHTML = "";
-  let income = 0;
-  let expense = 0;
+  let income = 0;      // 収入の合計
+  let expense = 0;     // 支出の合計
 
+  // 全ての取引をテーブルで表示
   transactions.forEach((transaction, index) => {
     const tr = document.createElement("tr");
     const amountClass = transaction.type === "income" ? "income" : "expense";
@@ -69,7 +55,7 @@ const renderTransactions = (transactions) => {
       </td>
     `;
 
-    // Edit button handler
+    // 編集ボタンをクリックしたとき
     tr.querySelector(".edit-btn").onclick = () => {
       document.getElementById("type").value = transaction.type;
       document.getElementById("amount").value = transaction.amount;
@@ -85,7 +71,7 @@ const renderTransactions = (transactions) => {
       }
     };
 
-    // Remove button handler
+    // 削除ボタンをクリックしたとき
     tr.querySelector(".remove-btn").onclick = () => {
       if (confirm("この取引を削除しますか？")) {
         removeTransaction(transaction.id);
@@ -94,7 +80,7 @@ const renderTransactions = (transactions) => {
 
     listEl.appendChild(tr);
 
-    // Calculate totals
+    // 収入と支出を計算
     if (transaction.type === "income") {
       income += transaction.amount;
     } else {
@@ -102,31 +88,28 @@ const renderTransactions = (transactions) => {
     }
   });
 
-  // Update summary
+  // 合計情報を表示（収入 - 支出 = 残高）
   const balance = income - expense;
   balanceEl.textContent = `現在: ${balance}$`;
   balanceEl.className = balance >= 0 ? "income" : "expense";
   incomeEl.textContent = `${income}$`;
   expenseEl.textContent = `${expense}$`;
 
-  // Update filters and chart
+  // フィルタのドロップダウンとグラフを更新
   if (typeof updateFilterOptions === 'function') {
     updateFilterOptions();
   }
   updateChart();
 };
 
-/**
- * Global chart instance
- */
+// グラフのインスタンスを保存
 let chart;
 
-/**
- * Updates the summary chart
- */
+// グラフを更新（ドーナツ型チャート）
 const updateChart = () => {
   const ctx = document.getElementById('summary-chart').getContext('2d');
 
+  // 収入と支出の合計を計算
   const income = transactions
     .filter(t => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
@@ -135,6 +118,7 @@ const updateChart = () => {
     .filter(t => t.type === 'expense')
     .reduce((sum, t) => sum + t.amount, 0);
 
+  // 既存のグラフを削除して新しいものを作成
   if (chart) {
     chart.destroy();
   }

@@ -1,14 +1,10 @@
-/**
- * Data storage and management functions for the Budget Tracker
- */
+// データ管理ファイル - localStorage を使ってデータを保存
 
-// Global variables
+// グローバル変数
 let transactions = [];
-let editIndex = null;
+let editIndex = null;  // 編集中のインデックス
 
-/**
- * Saves transactions to localStorage
- */
+// localStorageに取引データを保存する関数
 const saveTransactions = () => {
   try {
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -18,9 +14,7 @@ const saveTransactions = () => {
   }
 };
 
-/**
- * Loads transactions from localStorage and renders them
- */
+// localStorageからデータを読み込む
 const loadTransactions = () => {
   try {
     const saved = localStorage.getItem("transactions");
@@ -32,13 +26,10 @@ const loadTransactions = () => {
   renderTransactions(transactions);
 };
 
-/**
- * Adds a new transaction or edits an existing one
- * @param {Object} transaction - Transaction object
- */
+// 新しいデータを追加 または 既存のデータを編集
 const addOrEditTransaction = (transaction) => {
   if (editIndex !== null) {
-    // Edit existing transaction
+    // 既存のデータを編集する場合
     const existingTransaction = transactions[editIndex];
     if (existingTransaction) {
       transactions[editIndex] = {
@@ -51,7 +42,7 @@ const addOrEditTransaction = (transaction) => {
       editIndex = null;
     }
   } else {
-    // Add new transaction
+    // 新しいデータを追加する場合
     const newTransaction = {
       ...transaction,
       id: Date.now(),
@@ -64,19 +55,14 @@ const addOrEditTransaction = (transaction) => {
   renderTransactions(transactions);
 };
 
-/**
- * Removes a transaction by ID
- * @param {number} id - Transaction ID
- */
+// IDで指定した取引を削除
 const removeTransaction = (id) => {
   transactions = transactions.filter(transaction => transaction.id !== id);
   saveTransactions();
   renderTransactions(transactions);
 };
 
-/**
- * Resets all transactions
- */
+// すべてのデータをリセット（削除）
 const resetTransactions = () => {
   if (confirm("すべての取引をリセットしますか？")) {
     transactions = [];
@@ -85,17 +71,12 @@ const resetTransactions = () => {
   }
 };
 
-/**
- * Fetches all transactions (for potential API integration)
- * @returns {Promise<Array>} Promise resolving to transactions array
- */
+// APIとの連携が必要な場合に全データを取得
 const fetchTransactions = () => {
   return Promise.resolve(transactions);
 };
 
-/**
- * Exports transactions to CSV file
- */
+// 取引データをCSVファイルでエクスポート
 const exportToCSV = () => {
   const csvContent = "data:text/csv;charset=utf-8,"
     + "タイプ,金額,カテゴリ,日付\n"

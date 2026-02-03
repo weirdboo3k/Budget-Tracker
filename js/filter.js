@@ -1,26 +1,22 @@
-/**
- * Filtering and search functionality for the Budget Tracker
- */
+// フィルター機能 - 年月日でのフィルタリングと検索
 
-// DOM elements
+// HTMLのフィルター要素を取得
 const filterYearEl = document.getElementById("filter-year");
 const filterMonthEl = document.getElementById("filter-month");
 const filterDayEl = document.getElementById("filter-day");
 const clearFilterBtn = document.getElementById("clear-filter");
 const searchInput = document.getElementById("search-input");
 
-/**
- * Updates filter dropdown options based on available transactions
- */
+// フィルター用のドロップダウンを更新
 const updateFilterOptions = () => {
-  // Collect unique years from transactions
+  // 取引データから年を集める
   const years = new Set();
   transactions.forEach(transaction => {
     const date = new Date(transaction.date);
     years.add(date.getFullYear());
   });
 
-  // Update year options
+  // 年のドロップダウンを更新
   const currentYear = filterYearEl.value;
   const yearOptions = Array.from(years).sort((a, b) => b - a);
   const yearHTML = '<option value="">全年</option>' +
@@ -28,7 +24,7 @@ const updateFilterOptions = () => {
   filterYearEl.innerHTML = yearHTML;
   if (currentYear) filterYearEl.value = currentYear;
 
-  // Update day options based on selected month and year
+  // 選択した月と年に応じて日数のドロップダウンを更新
   const currentDay = filterDayEl.value;
   let dayHTML = '<option value="">全日</option>';
 
@@ -36,14 +32,14 @@ const updateFilterOptions = () => {
   const selectedYear = parseInt(filterYearEl.value);
 
   if (selectedMonth) {
-    // Get number of days in the selected month
+    // 月の日数を取得
     const year = selectedYear || new Date().getFullYear();
     const daysInMonth = new Date(year, selectedMonth, 0).getDate();
     for (let i = 1; i <= daysInMonth; i++) {
       dayHTML += `<option value="${i}">${i}</option>`;
     }
   } else {
-    // If no month selected, show all possible days (1-31)
+    // 月が選択されていない場合は1-31を表示
     for (let i = 1; i <= 31; i++) {
       dayHTML += `<option value="${i}">${i}</option>`;
     }
@@ -53,9 +49,7 @@ const updateFilterOptions = () => {
   if (currentDay) filterDayEl.value = currentDay;
 };
 
-/**
- * Filters transactions based on current filter criteria
- */
+// 選択されたフィルター条件で取引データを絞り込む
 const filterTransactions = () => {
   const year = filterYearEl.value;
   const month = filterMonthEl.value;
@@ -65,16 +59,16 @@ const filterTransactions = () => {
   const filtered = transactions.filter(transaction => {
     const date = new Date(transaction.date);
 
-    // Filter by year
+    // 年でフィルター
     if (year && date.getFullYear() != year) return false;
 
-    // Filter by month
+    // 月でフィルター
     if (month && (date.getMonth() + 1) != month) return false;
 
-    // Filter by day
+    // 日でフィルター
     if (day && date.getDate() != day) return false;
 
-    // Filter by search (category)
+    // 検索キーワードでフィルター（カテゴリ）
     if (search && !translateCategory(transaction.category).toLowerCase().includes(search)) return false;
 
     return true;
@@ -83,7 +77,7 @@ const filterTransactions = () => {
   renderTransactions(filtered);
 };
 
-// Event listeners
+// イベントリスナー - フィルター要素が変わったときの処理
 filterYearEl.addEventListener("change", () => {
   updateFilterOptions();
   filterTransactions();
@@ -96,8 +90,10 @@ filterMonthEl.addEventListener("change", () => {
 
 filterDayEl.addEventListener("change", filterTransactions);
 
+// 検索ボックスに入力されたら実行
 searchInput.addEventListener("input", filterTransactions);
 
+// フィルターをクリアする
 clearFilterBtn.addEventListener("click", () => {
   filterYearEl.value = "";
   filterMonthEl.value = "";

@@ -6,16 +6,14 @@
 const form = document.getElementById("transaction-form");
 const amountInput = document.getElementById("amount");
 
-/**
- * Validates and formats amount input to allow only numbers and one decimal point
- */
+// 金額の入力をチェック - 数字とドットだけ許可
 amountInput.addEventListener("input", (e) => {
   let value = e.target.value;
 
-  // Remove non-numeric characters except decimal point
+  // 数字とドット以外を削除
   value = value.replace(/[^0-9.]/g, "");
 
-  // Ensure only one decimal point
+  // ドットは1個だけにする
   const parts = value.split(".");
   if (parts.length > 2) {
     value = parts[0] + "." + parts.slice(1).join("");
@@ -24,22 +22,20 @@ amountInput.addEventListener("input", (e) => {
   e.target.value = value;
 });
 
-/**
- * Handles form submission for adding/editing transactions
- */
+// フォームの送信処理 - 新しいデータを追加または編集
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const amountValue = parseFloat(amountInput.value);
 
-  // Validate amount
+  // 金額のバリデーション - 0より大きい数字を確認
   if (!amountValue || amountValue <= 0) {
     alert("金額は0より大きくなければなりません！");
     amountInput.focus();
     return;
   }
 
-  // Validate category
+  // カテゴリが選択されているか確認
   const category = document.getElementById("category").value;
   if (!category) {
     alert("カテゴリを選択してください！");
@@ -47,7 +43,7 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  // Create transaction object
+  // トランザクションオブジェクトを作成
   const transaction = {
     type: document.getElementById("type").value,
     amount: amountValue,
@@ -55,32 +51,28 @@ form.addEventListener("submit", (e) => {
     date: new Date().toISOString()
   };
 
-  // Add or edit transaction
+  // データを追加または編集
   addOrEditTransaction(transaction);
 
-  // Reset form
+  // フォームをリセット
   form.reset();
   const submitBtn = document.querySelector('button[type="submit"]');
   if (submitBtn) submitBtn.textContent = "追加";
   editIndex = null;
 });
 
-/**
- * Handles reset button click
- */
+// リセットボタンをクリックしたときの処理
 document.getElementById("reset-btn").addEventListener("click", () => {
   resetTransactions();
 });
 
-/**
- * Handles dark mode toggle
- */
+// ダークモード切り替えボタン
 document.getElementById("theme-toggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const btn = document.getElementById("theme-toggle");
   btn.textContent = document.body.classList.contains("dark") ? "☀️ ライトモード" : "🌙 ダークモード";
 });
 
-// Initialize app
+// アプリを起動
 loadTransactions();
 
